@@ -1,0 +1,1 @@
+DROP TABLE `prefix_api_session`;
