@@ -7,13 +7,13 @@
 	<author>
 		<lang name="default">LiveStreet Developers Team</lang>
 	</author>
-	<homepage>http://livestreet.ru/</homepage>
+	<homepage>http://livestreetcms.com/</homepage>
 	<version>1.0</version>
 	<requires>
-		<livestreet>0.4.2</livestreet>
+		<livestreet>0.5</livestreet>
 	</requires>
 	<description>
-		<lang name="default"></lang>
+		<lang name="default">JSON API for LiveStreet</lang>
 		<lang name="russian">API в формате JSON для некоторых функций движка</lang>
 	</description>
 </plugin>
