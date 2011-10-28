@@ -167,7 +167,7 @@ class PluginApi_ModuleApi_Topic extends PluginApi_ModuleApi_Module {
 		}
 
 		if (strtotime($oTopic->getDateAdd())<=time()-Config::Get('acl.vote.topic.limit_time')) {
-			throw new ExceptionApiRequestError($this->Lang_Get('opic_vote_error_time'));
+			throw new ExceptionApiRequestError($this->Lang_Get('topic_vote_error_time'));
 		}
 
 		$iValue=$this->getParam('value');
