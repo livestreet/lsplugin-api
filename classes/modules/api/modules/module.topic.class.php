@@ -150,7 +150,7 @@ class PluginApi_ModuleApi_Topic extends PluginApi_ModuleApi_Module {
 
 		$oUserCurrent = $this->PluginApi_ModuleApi_getUserCurrent();
 
-		if (!$this->getParam('id') || !$this->getParam('value')) {
+		if (!$this->getParam('id')) {
 			throw new ExceptionApiBadRequest();
 		}
 

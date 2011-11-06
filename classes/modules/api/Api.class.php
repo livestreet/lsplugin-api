@@ -22,6 +22,7 @@ class PluginApi_ModuleApi extends Module
 		'common' => 'PluginApi_ModuleApi_Common',
 		'profile' => 'PluginApi_ModuleApi_Profile',
 		'topic' => 'PluginApi_ModuleApi_Topic',
+		'comment' => 'PluginApi_ModuleApi_Comment',
 	);
 	
 	public function Init()
