@@ -25,6 +25,18 @@ class PluginApi_ModuleApi_Topic extends PluginApi_ModuleApi_Module {
 			throw new ExceptionApiRequestError($this->Lang_Get('system_error'));
 		}
 
+		/**
+		 * Дополнительные данные топика
+		 */
+		$oTopic->setTopicExtraArray(@unserialize($oTopic->getExtra()));
+		if ($oTopic->getType()=='photoset') {
+			$oPhotos=array();
+			foreach ($oTopic->getPhotosetPhotos() as $oPhoto) {
+				$oPhotos[]=$this->filterObject($oPhoto);
+			}
+			$oTopic->setPhotosetPhotos($oPhotos);
+		}
+		
 		return $this->filterObject($oTopic,$this->makeFilterFields($this->getParam('fields')));
 	}
 
@@ -45,6 +57,7 @@ class PluginApi_ModuleApi_Topic extends PluginApi_ModuleApi_Module {
 		$aTopics=$this->Topic_GetTopicsRatingByDate($sDate,$this->_getPerPage());
 		$aFilterFields=$this->makeFilterFields($this->getParam('fields'));
 		foreach ($aTopics as $k => $oTopic) {
+			$oTopic->setTopicExtraArray(@unserialize($oTopic->getExtra()));
 			$aTopics[$k] = $this->filterObject($oTopic,$aFilterFields);
 		}
 		return array('collection'=>$aTopics,'count'=>count($aTopics));
@@ -59,6 +72,7 @@ class PluginApi_ModuleApi_Topic extends PluginApi_ModuleApi_Module {
 		$aFilterFields=$this->makeFilterFields($this->getParam('fields'));
 		$aRes=$this->Topic_GetTopicsNew($this->_getPage(),$this->_getPerPage());		
 		foreach ($aRes['collection'] as $k => $oTopic) {
+			$oTopic->setTopicExtraArray(@unserialize($oTopic->getExtra()));
 			$aRes['collection'][$k] = $this->filterObject($oTopic,$aFilterFields);
 		}
 		return $aRes;
@@ -99,6 +113,7 @@ class PluginApi_ModuleApi_Topic extends PluginApi_ModuleApi_Module {
 
 		$aFilterFields=$this->makeFilterFields($this->getParam('fields'));
 		foreach ($aRes['collection'] as $k => $oTopic) {
+			$oTopic->setTopicExtraArray(@unserialize($oTopic->getExtra()));
 			$aRes['collection'][$k] = $this->filterObject($oTopic,$aFilterFields);
 		}
 		return $aRes;
@@ -118,6 +133,7 @@ class PluginApi_ModuleApi_Topic extends PluginApi_ModuleApi_Module {
 		$aFilterFields=$this->makeFilterFields($this->getParam('fields'));
 		$aRes=$this->Topic_GetTopicsPersonal($this->_getPage(),$this->_getPerPage(),$sShowType);
 		foreach ($aRes['collection'] as $k => $oTopic) {
+			$oTopic->setTopicExtraArray(@unserialize($oTopic->getExtra()));
 			$aRes['collection'][$k] = $this->filterObject($oTopic,$aFilterFields);
 		}
 		return $aRes;
@@ -135,6 +151,7 @@ class PluginApi_ModuleApi_Topic extends PluginApi_ModuleApi_Module {
 		$aFilterFields=$this->makeFilterFields($this->getParam('fields'));
 		$aRes = $this->Topic_GetTopicsByFilter($aFilter,$this->_getPage(),$this->_getPerPage());
 		foreach ($aRes['collection'] as $k => $oTopic) {
+			$oTopic->setTopicExtraArray(@unserialize($oTopic->getExtra()));
 			$aRes['collection'][$k] = $this->filterObject($oTopic,$aFilterFields);
 		}
 		return $aRes;
