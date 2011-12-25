@@ -30,8 +30,7 @@ class PluginApi_ModuleApi_Stream extends PluginApi_ModuleApi_Module {
 		$bDisableGetMoreButton=count($aEvents) < Config::Get('module.stream.count_default');
 		$iStreamLastId=0;
 		if (count($aEvents)) {
-			$oEvenLast=end($aEvents);
-			$iStreamLastId=$oEvenLast->getId();
+			$iStreamLastId=end($aEvents)->getId();
 		}
 
 		foreach ($aEvents as $k => $oEvent) {

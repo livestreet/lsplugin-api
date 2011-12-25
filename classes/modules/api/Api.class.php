@@ -24,6 +24,7 @@ class PluginApi_ModuleApi extends Module
 		'topic' => 'PluginApi_ModuleApi_Topic',
 		'comment' => 'PluginApi_ModuleApi_Comment',
 		'stream' => 'PluginApi_ModuleApi_Stream',
+		'feed' => 'PluginApi_ModuleApi_Feed',
 	);
 	
 	public function Init()
