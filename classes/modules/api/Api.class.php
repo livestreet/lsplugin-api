@@ -23,6 +23,7 @@ class PluginApi_ModuleApi extends Module
 		'profile' => 'PluginApi_ModuleApi_Profile',
 		'topic' => 'PluginApi_ModuleApi_Topic',
 		'comment' => 'PluginApi_ModuleApi_Comment',
+		'stream' => 'PluginApi_ModuleApi_Stream',
 	);
 	
 	public function Init()
