@@ -26,10 +26,13 @@ class PluginApi_ModuleApi extends Module
 		'stream' => 'PluginApi_ModuleApi_Stream',
 		'feed' => 'PluginApi_ModuleApi_Feed',
 	);
+
+    protected $_aIncludePath = array();
 	
 	public function Init()
 	{
 		$this->oMapper = Engine::GetMapper(__CLASS__);
+        $this->_aIncludePath[] = Plugin::GetPath('api');
 	}
 	
 	public function run($sModule, $sAction, $aParams)
@@ -113,9 +116,17 @@ class PluginApi_ModuleApi extends Module
 		if (!isset($this->_aModules[$sModule])) {
 			return false;
 		}
-		$sFile = Plugin::GetPath('api') . 'classes/modules/api/modules/module.' . $sModule . '.class.php';
 
-		if (!file_exists($sFile)) {
+        $sFile = false;
+        foreach ($this->_aIncludePath as $sIncludePath) {
+		    $sFileCheck = $sIncludePath . 'classes/modules/api/modules/module.' . $sModule . '.class.php';
+            if (file_exists($sFileCheck)) {
+                $sFile = $sFileCheck;
+                break;
+            }
+        }
+
+		if (!$sFile) {
 			return false;
 		}
 		
