@@ -99,7 +99,15 @@ class PluginApi_ModuleApi extends Module
 	{
 		return $this->oUserCurrent;
 	}
-	
+
+    public function status()
+    {
+        return array (
+            'modules' => array_keys($this->_aModules),
+            'autorized' => (bool) $this->oUserCurrent
+        );
+    }
+
 	protected function _includeModule($sModule)
 	{
 		if (!isset($this->_aModules[$sModule])) {
