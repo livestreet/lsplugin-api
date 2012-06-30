@@ -2,8 +2,9 @@
 class PluginApi_ModuleApi_Common extends PluginApi_ModuleApi_Module {
 	protected $_aActions = array(
 		'login' => 'ActionLogin',
-		'logout' => 'ActionLogout',
-	);
+        'logout' => 'ActionLogout',
+        'status' => 'ActionStatus',
+    );
 
 	/**
 	 * Авторизация
@@ -29,4 +30,14 @@ class PluginApi_ModuleApi_Common extends PluginApi_ModuleApi_Module {
 	protected function ActionLogout() {
 		return array('result'=>(int)$this->PluginApi_ModuleApi_logout($this->getParam('hash')));
 	}
+
+    /**
+     * Получаем список модулей, и залогинен ли пользователь
+     *
+     * @return array
+     */
+    protected function ActionStatus() {
+        return $this->PluginApi_ModuleApi_status();
+    }
+
 }
