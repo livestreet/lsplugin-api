@@ -29,6 +29,9 @@ class PluginApi_ActionApi extends ActionPlugin
 				throw new ExceptionApiBadRequest($sModule);
 			}
 			$this->_aResponse = $this->PluginApi_ModuleApi_run($sModule, $sAction, $this->_aParams);
+			if (!isset($this->_aResponse)) {
+			    $this->_bStateError = true;
+			}
 		} catch (ExceptionApiRequestError $e){
 			$this->_bStateError = true;
 			$this->_sError = $e->getMessage();
