@@ -2,18 +2,18 @@
 <plugin>
 	<name>
 		<lang name="default">API</lang>
-		<lang name="russian">API</lang>
 	</name>
 	<author>
 		<lang name="default">LiveStreet Developers Team</lang>
 	</author>
-	<homepage>http://livestreetcms.com/</homepage>
-	<version>1.0</version>
+	<homepage></homepage>
+	<version>2.0.0</version>
 	<requires>
-		<livestreet>0.5</livestreet>
+		<livestreet>2.*</livestreet>
+		<plugins>
+		</plugins>
 	</requires>
 	<description>
-		<lang name="default">JSON API for LiveStreet</lang>
-		<lang name="russian">API в формате JSON для некоторых функций движка</lang>
+		<lang name="default">API for LiveStreet</lang>
 	</description>
 </plugin>
