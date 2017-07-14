@@ -49,8 +49,6 @@ class PluginApi_ActionMain extends ActionPlugin
         $this->SetTemplate(false);
 
         $sModule = $this->sCurrentEvent;
-        $sModule = str_replace(array('-'), '_', $sModule);
-        $sModuleClass = 'PluginApi_ModuleMain_EntityModule' . func_camelize($sModule);
         $sMethod = join('_', $this->GetParams());
         try {
             if ($sApiKey = Config::Get('plugin.api.api_key')) {
@@ -64,10 +62,7 @@ class PluginApi_ActionMain extends ActionPlugin
             if ($sUserKey = getRequestStr('user-key')) {
                 $this->PluginApi_Main_AuthApiUser($sUserKey);
             }
-
-            if (class_exists($sModuleClass)) {
-                $oModule = Engine::GetEntity($sModuleClass);
-                $oModule->setParams($_REQUEST);
+            if ($oModule = $this->PluginApi_Main_GetModuleByName($sModule)) {
                 $this->_aResponse = $oModule->run($sMethod);
             } else {
                 throw new PluginApi_ModuleMain_ExceptionModuleNotFound();

@@ -15,7 +15,7 @@ $config['per_page'] = 10;
  * Список разрешенных полей для возврата через API
  */
 $config['allow_fields'] = array(
-    'blog' => array(
+    'blog'  => array(
         'blog_id',
         'blog_title',
         'blog_description',
@@ -26,7 +26,30 @@ $config['allow_fields'] = array(
         'blog_avatar' => '#avatar', // преобразует поле в полный URL до файла
         'owner'       => 'user',
     ),
-    'user' => array(
+    'topic' => array(
+        'topic_id',
+        'topic_title',
+        'topic_slug',
+        'topic_tags',
+        'topic_date_publish',
+        'topic_publish',
+        'topic_publish_index',
+        'topic_rating',
+        'topic_count_vote',
+        'topic_count_vote_up',
+        'topic_count_vote_down',
+        'topic_count_read',
+        'topic_count_comment',
+        'topic_count_favourite',
+        'topic_text',
+        'topic_text_short',
+        'topic_cut_text',
+        'topic_forbid_comment',
+        'topic_extra'   => '#serialize',
+        'preview_image' => '#topic.preview(800x300crop)', // обработка превью. topic - модуль, preview - название обработчика, в скобках параметры
+        'user'          => 'user',
+    ),
+    'user'  => array(
         'user_id',
         'user_login',
         'user_date_register',

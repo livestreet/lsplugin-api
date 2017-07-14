@@ -17,4 +17,13 @@ class PluginApi_ModuleMain_EntityModuleBlog extends PluginApi_ModuleMain_EntityM
         }
         return $aResult;
     }
+
+    protected function runGet()
+    {
+        if ($sId = $this->getParam('id') and $oBlog = $this->Blog_GetBlogById($sId)) {
+            $aFilterFields = $this->makeFilterFields($this->getParamStr('fields'));
+            return $this->filterObject($oBlog, $aFilterFields, Config::Get('plugin.api.allow_fields.blog'));
+        }
+        throw new PluginApi_ModuleMain_ExceptionBadRequest('Blog not found');
+    }
 }

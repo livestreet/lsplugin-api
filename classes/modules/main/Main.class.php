@@ -25,6 +25,7 @@ class PluginApi_ModuleMain extends ModuleORM
     public function SetUserCurrent($oUser)
     {
         $this->oUserCurrent = $oUser;
+        $this->User_SetUserCurrent($oUser);
     }
 
     public function LoginApiUser($sLogin, $sPassword)
@@ -61,5 +62,24 @@ class PluginApi_ModuleMain extends ModuleORM
             return true;
         }
         return false;
+    }
+
+    public function GetModuleByName($sName)
+    {
+        $sName = str_replace(array('-'), '_', $sName);
+        $sModuleClass = 'PluginApi_ModuleMain_EntityModule' . func_camelize($sName);
+
+        if (!class_exists($sModuleClass)) {
+            /**
+             * Поддержка модулей от других плагинов
+             */
+            $sModuleClass = Engine::getInstance()->Plugin_GetDelegate('entity', $sModuleClass);
+        }
+        if (class_exists($sModuleClass)) {
+            $oModule = Engine::GetEntity($sModuleClass);
+            $oModule->setParams($_REQUEST);
+            return $oModule;
+        }
+        return null;
     }
 }

@@ -31,7 +31,11 @@ class PluginApi_ModuleMain_EntityModule extends Entity
 
     protected function getPerPage()
     {
-        return $this->getParamInt('per_page', Config::Get('plugin.api.per_page'));
+        $iPerPage = $this->getParamInt('per_page', Config::Get('plugin.api.per_page'));
+        if ($iPerPage > 100) {
+            $iPerPage = 100;
+        }
+        return $iPerPage;
     }
 
     protected function getPage()
@@ -45,6 +49,11 @@ class PluginApi_ModuleMain_EntityModule extends Entity
         if (!$this->PluginApi_ModuleMain_GetUserCurrent()) {
             throw new PluginApi_ModuleMain_ExceptionNeedAuthorization();
         }
+    }
+
+    protected function getUserCurrent()
+    {
+        return $this->PluginApi_ModuleMain_GetUserCurrent();
     }
 
     public function run($sMethod)
@@ -86,17 +95,16 @@ class PluginApi_ModuleMain_EntityModule extends Entity
         }
 
         $aResult = array();
-        foreach ($oObject->_getData() as $sKey => $sValue) {
-            if (!in_array($sKey, $aFieldsRoot)) {
-                continue;
-            }
+        foreach ($aFieldsRoot as $sKey) {
+            $sValue = $oObject->_getDataOne($sKey);
+
             if (is_object($sValue) && $sValue instanceOf Entity) {
                 if (isset($aFilter[$sKey]) and isset($aAllowFields[$sKey])) {
                     $aResult[$sKey] = $this->filterObject($sValue, $aFilter[$sKey], $aAllowFields[$sKey]);
                 }
             } else {
                 if (isset($aAllowFields[$sKey]) and strpos($aAllowFields[$sKey], '#') === 0) {
-                    $sValue = $this->fieldProcessing($sValue, $aAllowFields[$sKey]);
+                    $sValue = $this->fieldProcessing($sValue, $aAllowFields[$sKey], $sKey, $oObject);
                 }
                 $aResult[$sKey] = $sValue;
             }
@@ -174,11 +182,46 @@ class PluginApi_ModuleMain_EntityModule extends Entity
         return $aFields;
     }
 
-    protected function fieldProcessing($mValue, $sName)
+    protected function fieldProcessing($mValue, $sName, $sField, $oObject)
     {
         if ($sName == '#avatar') {
             $mValue = $this->Fs_GetPathWeb($mValue);
+        } elseif ($sName == '#serialize') {
+            $mValue = @unserialize($mValue);
+        } else {
+            /**
+             * Кастоный обработчик внутри модуля
+             */
+            $oObjectCall = $this;
+            $aNamePart = explode('.', substr($sName, 1));
+            if (count($aNamePart) > 1) {
+                /**
+                 * В обработчике указан модуль, получаем его
+                 */
+                $sName = $aNamePart[1];
+                if ($oModule = $this->PluginApi_Main_GetModuleByName($aNamePart[0])) {
+                    $oObjectCall = $oModule;
+                }
+            } else {
+                $sName = $aNamePart[0];
+            }
+            /**
+             * Смотрим наличие параметров
+             */
+            list($sName, $aParams) = $this->parseProcessingParams($sName);
+            $sMethod = 'fieldProcessing' . func_camelize($sName);
+            if (method_exists($oObjectCall, $sMethod)) {
+                $mValue = call_user_func(array($oObjectCall, $sMethod), $mValue, $sField, $oObject, $aParams);
+            }
         }
         return $mValue;
+    }
+
+    protected function parseProcessingParams($sName)
+    {
+        if (preg_match('#^(.+)\((.+)\)$#i', $sName, $aMatch)) {
+            return array($aMatch[1], explode(',', $aMatch[2]));
+        }
+        return array($sName, array());
     }
 }
